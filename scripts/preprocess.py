@@ -1,12 +1,10 @@
 import os
-import cv2
 import face_recognition
-import sys
+import pickle
 
 def get_face_encodings():
-    base_path = "AMS/labeled_images/"
-    known_face_encodings = []
-    known_student_roll_no = []
+    base_path = "AMS/AMS/labeled_images/"
+    roll_no_to_face_encoding = {}
 
     for student_folder in os.listdir(base_path):
         student_roll_no = student_folder
@@ -18,11 +16,11 @@ def get_face_encodings():
             if(len(face_recognition.face_encodings(image)) == 0):
                 print("No face found in the image")
                 continue
-            face_encoding = face_recognition.face_encodings(image)[0]
-            known_face_encodings.append(face_encoding)
-            known_student_roll_no.append(student_roll_no)
-    return known_face_encodings, known_student_roll_no
+            roll_no_to_face_encoding[student_roll_no] = face_recognition.face_encodings(image)[0]
 
+    with open('face_encodings.dat', 'wb') as f:
+        pickle.dump(roll_no_to_face_encoding, f)
 
+        
    
 
