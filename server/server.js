@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-const {spawn} = require('child_process');
+const { spawn } = require('child_process');
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -17,10 +17,9 @@ var listener = app.listen(8080, () => {
     console.log("Listening on port " + listener.address().port);
 });
 
-app.post("/readPython", (req, res)=>{
+app.post("/readPython", (req, res) => {
     var dataToSend;
-    const python = spawn('python', [path.join(__dirname, 'main.py')]);
-
+    const python = spawn('python', [path.join(__dirname, '..', 'scripts', 'preprocess.py')]);
 
     python.stdout.on('data', function (data) {
         console.log('Pipe data from python script ...');
@@ -33,6 +32,6 @@ app.post("/readPython", (req, res)=>{
 
     python.on('close', (code) => {
         console.log(`child process close all stdio with code ${code}`);
-        res.send(dataToSend)
+        res.send(dataToSend);
     });
-})
+});
